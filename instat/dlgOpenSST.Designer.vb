@@ -1,4 +1,20 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿' R- Instat
+' Copyright (C) 2015-2017
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License 
+' along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class dlgOpenSST
     Inherits System.Windows.Forms.Form
 
@@ -22,10 +38,15 @@ Partial Class dlgOpenSST
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(dlgOpenSST))
         Me.cmdOpenDataSet = New System.Windows.Forms.Button()
         Me.lblFileOpenPath = New System.Windows.Forms.Label()
-        Me.lblName = New System.Windows.Forms.Label()
+        Me.lblSSTName = New System.Windows.Forms.Label()
         Me.grpCSV = New System.Windows.Forms.GroupBox()
+        Me.ucrInputNAStrings = New instat.ucrInputTextBox()
+        Me.ucrInputDecimal = New instat.ucrInputComboBox()
+        Me.ucrInputSeparator = New instat.ucrInputComboBox()
+        Me.ucrInputEncoding = New instat.ucrInputComboBox()
         Me.lblEncoding = New System.Windows.Forms.Label()
         Me.nudSkip = New System.Windows.Forms.NumericUpDown()
         Me.lblSeparator = New System.Windows.Forms.Label()
@@ -35,13 +56,11 @@ Partial Class dlgOpenSST
         Me.chkStringsAsFactors = New System.Windows.Forms.CheckBox()
         Me.nudDataFrom = New System.Windows.Forms.NumericUpDown()
         Me.lblDataFromRow = New System.Windows.Forms.Label()
-        Me.ucrInputNAStrings = New instat.ucrInputTextBox()
-        Me.ucrInputDecimal = New instat.ucrInputComboBox()
-        Me.ucrInputSeparator = New instat.ucrInputComboBox()
-        Me.ucrInputEncoding = New instat.ucrInputComboBox()
         Me.ucrInputFilePath = New instat.ucrInputTextBox()
         Me.ucrInputName = New instat.ucrInputTextBox()
         Me.ucrBaseOpenSST = New instat.ucrButtons()
+        Me.lblLocationName = New System.Windows.Forms.Label()
+        Me.ucrInputNameLocation = New instat.ucrInputTextBox()
         Me.grpCSV.SuspendLayout()
         CType(Me.nudSkip, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nudDataFrom, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -49,37 +68,25 @@ Partial Class dlgOpenSST
         '
         'cmdOpenDataSet
         '
-        Me.cmdOpenDataSet.Location = New System.Drawing.Point(167, 6)
+        resources.ApplyResources(Me.cmdOpenDataSet, "cmdOpenDataSet")
         Me.cmdOpenDataSet.Name = "cmdOpenDataSet"
-        Me.cmdOpenDataSet.Size = New System.Drawing.Size(66, 23)
-        Me.cmdOpenDataSet.TabIndex = 41
-        Me.cmdOpenDataSet.Tag = "select_file"
-        Me.cmdOpenDataSet.Text = "Select File"
+        Me.cmdOpenDataSet.Tag = "Browse"
         Me.cmdOpenDataSet.UseVisualStyleBackColor = True
         '
         'lblFileOpenPath
         '
-        Me.lblFileOpenPath.AutoSize = True
-        Me.lblFileOpenPath.Location = New System.Drawing.Point(12, 9)
+        resources.ApplyResources(Me.lblFileOpenPath, "lblFileOpenPath")
         Me.lblFileOpenPath.Name = "lblFileOpenPath"
-        Me.lblFileOpenPath.Size = New System.Drawing.Size(23, 13)
-        Me.lblFileOpenPath.TabIndex = 40
-        Me.lblFileOpenPath.Text = "File"
         '
-        'lblName
+        'lblSSTName
         '
-        Me.lblName.AutoSize = True
-        Me.lblName.Location = New System.Drawing.Point(12, 45)
-        Me.lblName.Name = "lblName"
-        Me.lblName.Size = New System.Drawing.Size(112, 13)
-        Me.lblName.TabIndex = 38
-        Me.lblName.Tag = "New Dataframe  Name"
-        Me.lblName.Text = "New Dataframe Name"
+        resources.ApplyResources(Me.lblSSTName, "lblSSTName")
+        Me.lblSSTName.Name = "lblSSTName"
+        Me.lblSSTName.Tag = "SST_Data_Frame_Name:"
         '
         'grpCSV
         '
-        Me.grpCSV.AutoSize = True
-        Me.grpCSV.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        resources.ApplyResources(Me.grpCSV, "grpCSV")
         Me.grpCSV.Controls.Add(Me.ucrInputNAStrings)
         Me.grpCSV.Controls.Add(Me.ucrInputDecimal)
         Me.grpCSV.Controls.Add(Me.ucrInputSeparator)
@@ -91,160 +98,133 @@ Partial Class dlgOpenSST
         Me.grpCSV.Controls.Add(Me.lblDecimal)
         Me.grpCSV.Controls.Add(Me.lblNAStrings)
         Me.grpCSV.Controls.Add(Me.chkStringsAsFactors)
-        Me.grpCSV.Location = New System.Drawing.Point(16, 100)
         Me.grpCSV.Name = "grpCSV"
-        Me.grpCSV.Size = New System.Drawing.Size(217, 248)
-        Me.grpCSV.TabIndex = 43
         Me.grpCSV.TabStop = False
-        Me.grpCSV.Text = "Import csv Options"
-        Me.grpCSV.Visible = False
+        '
+        'ucrInputNAStrings
+        '
+        Me.ucrInputNAStrings.AddQuotesIfUnrecognised = True
+        Me.ucrInputNAStrings.IsMultiline = False
+        Me.ucrInputNAStrings.IsReadOnly = False
+        resources.ApplyResources(Me.ucrInputNAStrings, "ucrInputNAStrings")
+        Me.ucrInputNAStrings.Name = "ucrInputNAStrings"
+        '
+        'ucrInputDecimal
+        '
+        Me.ucrInputDecimal.AddQuotesIfUnrecognised = True
+        Me.ucrInputDecimal.IsReadOnly = False
+        resources.ApplyResources(Me.ucrInputDecimal, "ucrInputDecimal")
+        Me.ucrInputDecimal.Name = "ucrInputDecimal"
+        '
+        'ucrInputSeparator
+        '
+        Me.ucrInputSeparator.AddQuotesIfUnrecognised = True
+        Me.ucrInputSeparator.IsReadOnly = False
+        resources.ApplyResources(Me.ucrInputSeparator, "ucrInputSeparator")
+        Me.ucrInputSeparator.Name = "ucrInputSeparator"
+        '
+        'ucrInputEncoding
+        '
+        Me.ucrInputEncoding.AddQuotesIfUnrecognised = True
+        Me.ucrInputEncoding.IsReadOnly = False
+        resources.ApplyResources(Me.ucrInputEncoding, "ucrInputEncoding")
+        Me.ucrInputEncoding.Name = "ucrInputEncoding"
         '
         'lblEncoding
         '
-        Me.lblEncoding.AutoSize = True
-        Me.lblEncoding.Location = New System.Drawing.Point(6, 27)
+        resources.ApplyResources(Me.lblEncoding, "lblEncoding")
         Me.lblEncoding.Name = "lblEncoding"
-        Me.lblEncoding.Size = New System.Drawing.Size(52, 13)
-        Me.lblEncoding.TabIndex = 3
-        Me.lblEncoding.Tag = "Encoding"
-        Me.lblEncoding.Text = "Encoding"
+        Me.lblEncoding.Tag = "Encoding:"
         '
         'nudSkip
         '
-        Me.nudSkip.Location = New System.Drawing.Point(83, 184)
+        resources.ApplyResources(Me.nudSkip, "nudSkip")
         Me.nudSkip.Maximum = New Decimal(New Integer() {1000000, 0, 0, 0})
         Me.nudSkip.Name = "nudSkip"
-        Me.nudSkip.Size = New System.Drawing.Size(59, 20)
-        Me.nudSkip.TabIndex = 32
         '
         'lblSeparator
         '
-        Me.lblSeparator.AutoSize = True
-        Me.lblSeparator.Location = New System.Drawing.Point(6, 66)
+        resources.ApplyResources(Me.lblSeparator, "lblSeparator")
         Me.lblSeparator.Name = "lblSeparator"
-        Me.lblSeparator.Size = New System.Drawing.Size(53, 13)
-        Me.lblSeparator.TabIndex = 6
-        Me.lblSeparator.Tag = "Separator"
-        Me.lblSeparator.Text = "Separator"
+        Me.lblSeparator.Tag = "Separator:"
         '
         'lblLinesToSkip
         '
-        Me.lblLinesToSkip.AutoSize = True
-        Me.lblLinesToSkip.Location = New System.Drawing.Point(3, 186)
+        resources.ApplyResources(Me.lblLinesToSkip, "lblLinesToSkip")
         Me.lblLinesToSkip.Name = "lblLinesToSkip"
-        Me.lblLinesToSkip.Size = New System.Drawing.Size(72, 13)
-        Me.lblLinesToSkip.TabIndex = 30
-        Me.lblLinesToSkip.Text = "Lines To Skip"
         '
         'lblDecimal
         '
-        Me.lblDecimal.AutoSize = True
-        Me.lblDecimal.Location = New System.Drawing.Point(8, 105)
+        resources.ApplyResources(Me.lblDecimal, "lblDecimal")
         Me.lblDecimal.Name = "lblDecimal"
-        Me.lblDecimal.Size = New System.Drawing.Size(45, 13)
-        Me.lblDecimal.TabIndex = 7
-        Me.lblDecimal.Tag = "Decimal"
-        Me.lblDecimal.Text = "Decimal"
+        Me.lblDecimal.Tag = "Decimal:"
         '
         'lblNAStrings
         '
-        Me.lblNAStrings.AutoSize = True
-        Me.lblNAStrings.Location = New System.Drawing.Point(6, 137)
+        resources.ApplyResources(Me.lblNAStrings, "lblNAStrings")
         Me.lblNAStrings.Name = "lblNAStrings"
-        Me.lblNAStrings.Size = New System.Drawing.Size(102, 13)
-        Me.lblNAStrings.TabIndex = 10
-        Me.lblNAStrings.Text = "Missing Value String"
         '
         'chkStringsAsFactors
         '
-        Me.chkStringsAsFactors.AutoSize = True
-        Me.chkStringsAsFactors.Location = New System.Drawing.Point(5, 212)
+        resources.ApplyResources(Me.chkStringsAsFactors, "chkStringsAsFactors")
         Me.chkStringsAsFactors.Name = "chkStringsAsFactors"
-        Me.chkStringsAsFactors.Size = New System.Drawing.Size(186, 17)
-        Me.chkStringsAsFactors.TabIndex = 26
         Me.chkStringsAsFactors.Tag = "Strings_as_factors"
-        Me.chkStringsAsFactors.Text = "Convert Strings to Factor Columns"
         Me.chkStringsAsFactors.UseVisualStyleBackColor = True
         '
         'nudDataFrom
         '
-        Me.nudDataFrom.Location = New System.Drawing.Point(105, 73)
+        resources.ApplyResources(Me.nudDataFrom, "nudDataFrom")
         Me.nudDataFrom.Maximum = New Decimal(New Integer() {1000000, 0, 0, 0})
         Me.nudDataFrom.Name = "nudDataFrom"
-        Me.nudDataFrom.Size = New System.Drawing.Size(59, 20)
-        Me.nudDataFrom.TabIndex = 45
         Me.nudDataFrom.Value = New Decimal(New Integer() {5, 0, 0, 0})
         '
         'lblDataFromRow
         '
-        Me.lblDataFromRow.AutoSize = True
-        Me.lblDataFromRow.Location = New System.Drawing.Point(12, 75)
+        resources.ApplyResources(Me.lblDataFromRow, "lblDataFromRow")
         Me.lblDataFromRow.Name = "lblDataFromRow"
-        Me.lblDataFromRow.Size = New System.Drawing.Size(81, 13)
-        Me.lblDataFromRow.TabIndex = 44
-        Me.lblDataFromRow.Tag = "Data_From_Row"
-        Me.lblDataFromRow.Text = "Data From Row"
-        '
-        'ucrInputNAStrings
-        '
-        Me.ucrInputNAStrings.IsReadOnly = False
-        Me.ucrInputNAStrings.Location = New System.Drawing.Point(5, 153)
-        Me.ucrInputNAStrings.Name = "ucrInputNAStrings"
-        Me.ucrInputNAStrings.Size = New System.Drawing.Size(137, 21)
-        Me.ucrInputNAStrings.TabIndex = 39
-        '
-        'ucrInputDecimal
-        '
-        Me.ucrInputDecimal.IsReadOnly = False
-        Me.ucrInputDecimal.Location = New System.Drawing.Point(74, 102)
-        Me.ucrInputDecimal.Name = "ucrInputDecimal"
-        Me.ucrInputDecimal.Size = New System.Drawing.Size(137, 21)
-        Me.ucrInputDecimal.TabIndex = 36
-        '
-        'ucrInputSeparator
-        '
-        Me.ucrInputSeparator.IsReadOnly = False
-        Me.ucrInputSeparator.Location = New System.Drawing.Point(74, 60)
-        Me.ucrInputSeparator.Name = "ucrInputSeparator"
-        Me.ucrInputSeparator.Size = New System.Drawing.Size(137, 21)
-        Me.ucrInputSeparator.TabIndex = 35
-        '
-        'ucrInputEncoding
-        '
-        Me.ucrInputEncoding.IsReadOnly = False
-        Me.ucrInputEncoding.Location = New System.Drawing.Point(62, 25)
-        Me.ucrInputEncoding.Name = "ucrInputEncoding"
-        Me.ucrInputEncoding.Size = New System.Drawing.Size(149, 21)
-        Me.ucrInputEncoding.TabIndex = 33
+        Me.lblDataFromRow.Tag = "Data_From_Row:"
         '
         'ucrInputFilePath
         '
+        Me.ucrInputFilePath.AddQuotesIfUnrecognised = True
+        Me.ucrInputFilePath.IsMultiline = False
         Me.ucrInputFilePath.IsReadOnly = False
-        Me.ucrInputFilePath.Location = New System.Drawing.Point(39, 6)
+        resources.ApplyResources(Me.ucrInputFilePath, "ucrInputFilePath")
         Me.ucrInputFilePath.Name = "ucrInputFilePath"
-        Me.ucrInputFilePath.Size = New System.Drawing.Size(119, 21)
-        Me.ucrInputFilePath.TabIndex = 42
         '
         'ucrInputName
         '
+        Me.ucrInputName.AddQuotesIfUnrecognised = True
+        Me.ucrInputName.IsMultiline = False
         Me.ucrInputName.IsReadOnly = False
-        Me.ucrInputName.Location = New System.Drawing.Point(128, 42)
+        resources.ApplyResources(Me.ucrInputName, "ucrInputName")
         Me.ucrInputName.Name = "ucrInputName"
-        Me.ucrInputName.Size = New System.Drawing.Size(102, 21)
-        Me.ucrInputName.TabIndex = 39
         '
         'ucrBaseOpenSST
         '
-        Me.ucrBaseOpenSST.Location = New System.Drawing.Point(12, 361)
+        resources.ApplyResources(Me.ucrBaseOpenSST, "ucrBaseOpenSST")
         Me.ucrBaseOpenSST.Name = "ucrBaseOpenSST"
-        Me.ucrBaseOpenSST.Size = New System.Drawing.Size(410, 52)
-        Me.ucrBaseOpenSST.TabIndex = 0
+        '
+        'lblLocationName
+        '
+        resources.ApplyResources(Me.lblLocationName, "lblLocationName")
+        Me.lblLocationName.Name = "lblLocationName"
+        Me.lblLocationName.Tag = "Location_Data_Frame_Name:"
+        '
+        'ucrInputNameLocation
+        '
+        Me.ucrInputNameLocation.AddQuotesIfUnrecognised = True
+        Me.ucrInputNameLocation.IsMultiline = False
+        Me.ucrInputNameLocation.IsReadOnly = False
+        resources.ApplyResources(Me.ucrInputNameLocation, "ucrInputNameLocation")
+        Me.ucrInputNameLocation.Name = "ucrInputNameLocation"
         '
         'dlgOpenSST
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(428, 420)
+        Me.Controls.Add(Me.ucrInputNameLocation)
+        Me.Controls.Add(Me.lblLocationName)
         Me.Controls.Add(Me.nudDataFrom)
         Me.Controls.Add(Me.lblDataFromRow)
         Me.Controls.Add(Me.grpCSV)
@@ -252,13 +232,13 @@ Partial Class dlgOpenSST
         Me.Controls.Add(Me.ucrInputName)
         Me.Controls.Add(Me.cmdOpenDataSet)
         Me.Controls.Add(Me.lblFileOpenPath)
-        Me.Controls.Add(Me.lblName)
+        Me.Controls.Add(Me.lblSSTName)
         Me.Controls.Add(Me.ucrBaseOpenSST)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "dlgOpenSST"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Tag = "Open_SST"
-        Me.Text = "Open SST"
         Me.grpCSV.ResumeLayout(False)
         Me.grpCSV.PerformLayout()
         CType(Me.nudSkip, System.ComponentModel.ISupportInitialize).EndInit()
@@ -273,7 +253,7 @@ Partial Class dlgOpenSST
     Friend WithEvents ucrInputName As ucrInputTextBox
     Friend WithEvents cmdOpenDataSet As Button
     Friend WithEvents lblFileOpenPath As Label
-    Friend WithEvents lblName As Label
+    Friend WithEvents lblSSTName As Label
     Friend WithEvents grpCSV As GroupBox
     Friend WithEvents ucrInputNAStrings As ucrInputTextBox
     Friend WithEvents ucrInputDecimal As ucrInputComboBox
@@ -288,4 +268,6 @@ Partial Class dlgOpenSST
     Friend WithEvents chkStringsAsFactors As CheckBox
     Friend WithEvents nudDataFrom As NumericUpDown
     Friend WithEvents lblDataFromRow As Label
+    Friend WithEvents lblLocationName As Label
+    Friend WithEvents ucrInputNameLocation As ucrInputTextBox
 End Class

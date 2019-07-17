@@ -1,6 +1,5 @@
-﻿
-' Instat-R
-' Copyright (C) 2015
+﻿' R- Instat
+' Copyright (C) 2015-2017
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -12,129 +11,191 @@
 ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ' GNU General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License k
+' You should have received a copy of the GNU General Public License 
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Imports instat
 Imports instat.Translations
+
 Public Class dlgScatterPlot
     Private clsRggplotFunction As New RFunction
-    Private clsRgeom_scatterplotFunction As New RFunction
+    Private clsRScatterGeomFunction As New RFunction
     Private clsRaesFunction As New RFunction
+    Private clsLocalRaesFunction As New RFunction
+    Private clsBaseOperator As New ROperator
     Private bFirstLoad As Boolean = True
+    Private bReset As Boolean = True
+    Private bResetSubdialog As Boolean = True
+    Private bResetlayerSubdialog As Boolean = True
+    Private clsLabsFunction As New RFunction
+    Private clsXlabsFunction As New RFunction
+    Private clsYlabsFunction As New RFunction
+    Private clsXScalecontinuousFunction As New RFunction
+    Private clsYScalecontinuousFunction As New RFunction
+    Private clsFacetsFunction As New RFunction
+    Private clsThemeFunction As New RFunction
+    Private dctThemeFunctions As New Dictionary(Of String, RFunction)
+    Dim strReceiverXVarType As String = ""
+    Dim strReceiverYSingleVarType As String = ""
+    Dim strReceiverYMultipleVarType As String = ""
+
+    Private clsGeomSmoothFunc As New RFunction
+    Private clsGeomSmoothParameter As New RParameter
 
     Private Sub dlgScatterPlot_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        autoTranslate(Me)
         If bFirstLoad Then
             InitialiseDialog()
-            'setdefauts
-            SetDefaults()
             bFirstLoad = False
         End If
-        autoTranslate(Me)
+        If bReset Then
+            SetDefaults()
+        End If
+        SetRCodeForControls(bReset)
+        bReset = False
         TestOkEnabled()
-
+        CheckIfNumeric()
     End Sub
 
     Private Sub InitialiseDialog()
-        ucrBase.clsRsyntax.SetOperation("+")
-        clsRggplotFunction.SetRCommand("ggplot")
-        clsRaesFunction.SetRCommand("aes")
-        clsRggplotFunction.AddParameter("mapping", clsRFunctionParameter:=clsRaesFunction)
-        ucrBase.clsRsyntax.SetOperatorParameter(True, clsRFunc:=clsRggplotFunction)
-
-        clsRgeom_scatterplotFunction.SetRCommand("geom_point")
-        ucrBase.clsRsyntax.SetOperatorParameter(False, clsRFunc:=clsRgeom_scatterplotFunction)
-
-        ucrVariablesAsFactorForScatter.SetFactorReceiver(ucrFactorOptionalReceiver)
-        ucrVariablesAsFactorForScatter.SetSelector(ucrSelectorForScatter)
-        ucrVariablesAsFactorForScatter.SetIncludedDataType({"factor", "numeric"})
-
-        ucrReceiverX.Selector = ucrSelectorForScatter
-        ucrReceiverX.SetIncludedDataTypes({"factor", "numeric"})
-        ucrFactorOptionalReceiver.Selector = ucrSelectorForScatter
-        ucrFactorOptionalReceiver.SetIncludedDataTypes({"factor", "numeric"})
-
-        sdgPlots.SetRSyntax(ucrBase.clsRsyntax)
         ucrBase.iHelpTopicID = 433
-
-        ucrSaveScatterPlot.SetDataFrameSelector(ucrSelectorForScatter.ucrAvailableDataFrames)
-        ucrSaveScatterPlot.strPrefix = "Scatter"
         ucrBase.clsRsyntax.bExcludeAssignedFunctionOutput = False
+        ucrBase.clsRsyntax.iCallType = 3
 
+
+        ucrSelectorForScatter.SetParameter(New RParameter("data", 0))
+        ucrSelectorForScatter.SetParameterIsrfunction()
+
+        ucrVariablesAsFactorForScatter.SetParameter(New RParameter("y", 1))
+        ucrVariablesAsFactorForScatter.SetParameterIsString()
+        ucrVariablesAsFactorForScatter.bWithQuotes = False
+        ucrVariablesAsFactorForScatter.Selector = ucrSelectorForScatter
+        ucrVariablesAsFactorForScatter.SetFactorReceiver(ucrFactorOptionalReceiver)
+        ucrVariablesAsFactorForScatter.strSelectorHeading = "Variables"
+        ucrVariablesAsFactorForScatter.SetValuesToIgnore({Chr(34) & Chr(34)})
+        ucrVariablesAsFactorForScatter.bAddParameterIfEmpty = True
+
+        ucrReceiverX.SetParameter(New RParameter("x", 0))
+        ucrReceiverX.SetParameterIsString()
+        ucrReceiverX.bWithQuotes = False
+        ucrReceiverX.Selector = ucrSelectorForScatter
+        ucrReceiverX.strSelectorHeading = "Variables"
+        ucrReceiverX.SetValuesToIgnore({Chr(34) & Chr(34)})
+        ucrReceiverX.bAddParameterIfEmpty = True
+
+        ucrFactorOptionalReceiver.SetParameter(New RParameter("colour", 2))
+        ucrFactorOptionalReceiver.SetParameterIsString()
+        ucrFactorOptionalReceiver.bWithQuotes = False
+        ucrFactorOptionalReceiver.Selector = ucrSelectorForScatter
+        ucrFactorOptionalReceiver.strSelectorHeading = "Variables"
+
+        clsGeomSmoothFunc.SetPackageName("ggplot2")
+        clsGeomSmoothFunc.SetRCommand("geom_smooth")
+        clsGeomSmoothFunc.AddParameter("method", Chr(34) & "lm" & Chr(34), iPosition:=0)
+        clsGeomSmoothFunc.AddParameter("se", "FALSE", iPosition:=1)
+        clsGeomSmoothParameter.SetArgumentName("geom_smooth")
+        clsGeomSmoothParameter.SetArgument(clsGeomSmoothFunc)
+        ucrChkLineofBestFit.SetText("Add Line of Best Fit")
+        ucrChkLineofBestFit.AddToLinkedControls(ucrChkWithSE, {True}, bNewLinkedHideIfParameterMissing:=True)
+        ucrChkLineofBestFit.SetParameter(clsGeomSmoothParameter, bNewChangeParameterValue:=False, bNewAddRemoveParameter:=True)
+
+        ucrChkWithSE.SetText("With Standard Error")
+        ucrChkWithSE.SetParameter(New RParameter("se"), bNewAddRemoveParameter:=False, bNewChangeParameterValue:=True)
+        ucrChkWithSE.SetValuesCheckedAndUnchecked("TRUE", "FALSE")
+        ucrChkWithSE.SetRDefault("TRUE")
+
+        ucrSaveScatterPlot.SetPrefix("scatterplot")
+        ucrSaveScatterPlot.SetSaveTypeAsGraph()
+        ucrSaveScatterPlot.SetDataFrameSelector(ucrSelectorForScatter.ucrAvailableDataFrames)
+        ucrSaveScatterPlot.SetCheckBoxText("Save Graph")
+        ucrSaveScatterPlot.SetIsComboBox()
+        ucrSaveScatterPlot.SetAssignToIfUncheckedValue("last_graph")
     End Sub
+
     Private Sub SetDefaults()
-        'setDefaults
-        clsRaesFunction.ClearParameters()
-        clsRgeom_scatterplotFunction.ClearParameters()
+        clsBaseOperator = New ROperator
+        clsRggplotFunction = New RFunction
+        clsRScatterGeomFunction = New RFunction
+        clsRaesFunction = New RFunction
+
         ucrSelectorForScatter.Reset()
-        ucrSelectorForScatter.Focus()
-        ucrVariablesAsFactorForScatter.ResetControl()
-        sdgPlots.Reset()
+        ucrSelectorForScatter.SetGgplotFunction(clsBaseOperator)
         ucrSaveScatterPlot.Reset()
-        SetXParameter()
-        SetYParameter()
-        TestOkEnabled()
-    End Sub
-    Private Sub ucrSelectorForScatter_DataFrameChanged() Handles ucrSelectorForScatter.DataFrameChanged
-        clsRggplotFunction.AddParameter("data", clsRFunctionParameter:=ucrSelectorForScatter.ucrAvailableDataFrames.clsCurrDataFrame)
+        ucrVariablesAsFactorForScatter.SetMeAsReceiver()
+        sdgPlots.Reset()
+        bResetSubdialog = True
+        bResetlayerSubdialog = True
+
+        clsBaseOperator.SetOperation("+")
+        clsBaseOperator.AddParameter("ggplot", clsRFunctionParameter:=clsRggplotFunction, iPosition:=0)
+        clsBaseOperator.AddParameter("scatter", clsRFunctionParameter:=clsRScatterGeomFunction, iPosition:=2)
+
+        clsRggplotFunction.SetPackageName("ggplot2")
+        clsRggplotFunction.SetRCommand("ggplot")
+        clsRggplotFunction.AddParameter("mapping", clsRFunctionParameter:=clsRaesFunction, iPosition:=1)
+
+        clsRaesFunction.SetPackageName("ggplot2")
+        clsRaesFunction.SetRCommand("aes")
+        clsRaesFunction.AddParameter("x", Chr(34) & Chr(34))
+        clsRaesFunction.AddParameter("y", Chr(34) & Chr(34))
+
+        clsRScatterGeomFunction.SetPackageName("ggplot2")
+        clsRScatterGeomFunction.SetRCommand("geom_point")
+
+        clsBaseOperator.AddParameter(GgplotDefaults.clsDefaultThemeParameter.Clone())
+        clsXlabsFunction = GgplotDefaults.clsXlabTitleFunction.Clone()
+        clsYlabsFunction = GgplotDefaults.clsYlabTitleFunction.Clone()
+        clsLabsFunction = GgplotDefaults.clsDefaultLabs.Clone()
+        clsXScalecontinuousFunction = GgplotDefaults.clsXScalecontinuousFunction.Clone()
+        clsYScalecontinuousFunction = GgplotDefaults.clsYScalecontinuousFunction.Clone()
+        clsFacetsFunction = GgplotDefaults.clsFacetFunction.Clone()
+        dctThemeFunctions = New Dictionary(Of String, RFunction)(GgplotDefaults.dctThemeFunctions)
+        clsThemeFunction = GgplotDefaults.clsDefaultThemeFunction
+        clsLocalRaesFunction = GgplotDefaults.clsAesFunction.Clone()
+        clsGeomSmoothFunc.AddParameter("se", "FALSE", iPosition:=1)
+
+        clsBaseOperator.SetAssignTo("last_graph", strTempDataframe:=ucrSelectorForScatter.ucrAvailableDataFrames.cboAvailableDataFrames.Text, strTempGraph:="last_graph")
+        ucrBase.clsRsyntax.SetBaseROperator(clsBaseOperator)
     End Sub
 
-    Private Sub SetXParameter()
-        If Not ucrReceiverX.IsEmpty Then
-            clsRaesFunction.AddParameter("x", ucrReceiverX.GetVariableNames(False))
-        Else
-            clsRaesFunction.AddParameter("x", Chr(34) & Chr(34))
-        End If
-    End Sub
-
-    Private Sub SetYParameter()
-        If Not ucrVariablesAsFactorForScatter.IsEmpty Then
-            clsRaesFunction.AddParameter("y", ucrVariablesAsFactorForScatter.GetVariableNames(False))
-        Else
-            clsRaesFunction.AddParameter("y", Chr(34) & Chr(34))
-        End If
-    End Sub
-    Private Sub ucrReceiverX_SelectionChanged(sender As Object, e As EventArgs) Handles ucrReceiverX.SelectionChanged
-        SetXParameter()
-        TestOkEnabled()
-    End Sub
-
-    Private Sub ucrFactorOptionalReceiver_SelectionChanged(sender As Object, e As EventArgs) Handles ucrFactorOptionalReceiver.SelectionChanged
-        If Not ucrFactorOptionalReceiver.IsEmpty Then
-            clsRaesFunction.AddParameter("colour", ucrFactorOptionalReceiver.GetVariableNames(False))
-        Else
-            clsRaesFunction.RemoveParameterByName("colour")
-        End If
+    Public Sub SetRCodeForControls(bReset As Boolean)
+        ucrSelectorForScatter.SetRCode(clsRggplotFunction, bReset)
+        ucrReceiverX.SetRCode(clsRaesFunction, bReset)
+        ucrVariablesAsFactorForScatter.SetRCode(clsRaesFunction, bReset)
+        ucrFactorOptionalReceiver.SetRCode(clsRaesFunction, bReset)
+        ucrChkLineofBestFit.SetRCode(clsBaseOperator, bReset)
+        ucrSaveScatterPlot.SetRCode(clsBaseOperator, bReset)
+        ucrChkWithSE.SetRCode(clsGeomSmoothFunc, bReset)
     End Sub
 
     Private Sub TestOkEnabled()
-        'tests when okay Is enable. Both x and y aesthetics are mandatory but can be set to x="" or(exclusive) y="" in case the other one is filled. 
-        If (ucrReceiverX.IsEmpty() AndAlso ucrVariablesAsFactorForScatter.IsEmpty) OrElse (ucrSaveScatterPlot.chkSaveGraph.Checked AndAlso ucrSaveScatterPlot.ucrInputGraphName.IsEmpty) Then
+        ' Either y or x can be empty but not both
+
+        If (Not ucrSaveScatterPlot.IsComplete) OrElse (ucrVariablesAsFactorForScatter.IsEmpty AndAlso ucrReceiverX.IsEmpty()) Then
             ucrBase.OKEnabled(False)
         Else
             ucrBase.OKEnabled(True)
         End If
     End Sub
 
-
     Private Sub ucrBase_ClickReset(sender As Object, e As EventArgs) Handles ucrBase.ClickReset
         SetDefaults()
+        SetRCodeForControls(True)
+        TestOkEnabled()
     End Sub
 
     Private Sub cmdOptions_Click(sender As Object, e As EventArgs) Handles cmdOptions.Click
-        sdgPlots.SetDataFrame(strNewDataFrame:=ucrSelectorForScatter.ucrAvailableDataFrames.cboAvailableDataFrames.Text)
+        sdgPlots.SetRCode(clsNewOperator:=ucrBase.clsRsyntax.clsBaseOperator, clsNewGlobalAesFunction:=clsRaesFunction, clsNewYScalecontinuousFunction:=clsYScalecontinuousFunction, clsNewXScalecontinuousFunction:=clsXScalecontinuousFunction, clsNewLabsFunction:=clsLabsFunction, clsNewXLabsTitleFunction:=clsXlabsFunction, clsNewYLabTitleFunction:=clsYlabsFunction, clsNewFacetFunction:=clsFacetsFunction, clsNewThemeFunction:=clsThemeFunction, dctNewThemeFunctions:=dctThemeFunctions, ucrNewBaseSelector:=ucrSelectorForScatter, bReset:=bResetSubdialog)
         sdgPlots.ShowDialog()
-    End Sub
-
-    Private Sub ucrVariablesAsFactor_SelectionChanged() Handles ucrVariablesAsFactorForScatter.SelectionChanged
-        SetYParameter()
-        TestOkEnabled()
+        bResetSubdialog = False
     End Sub
 
     Private Sub cmdScatterPlotOptions_Click(sender As Object, e As EventArgs) Handles cmdScatterPlotOptions.Click
         'SetupLayer sends the components storing the plot info (clsRaesFunction, clsRggplotFunction, ...) of dlgScatteredPlot through to sdgLayerOptions where these will be edited.
-        sdgLayerOptions.SetupLayer(clsTempGgPlot:=clsRggplotFunction, clsTempGeomFunc:=clsRgeom_scatterplotFunction, clsTempAesFunc:=clsRaesFunction, bFixAes:=True, bFixGeom:=True, strDataframe:=ucrSelectorForScatter.ucrAvailableDataFrames.cboAvailableDataFrames.Text, bApplyAesGlobally:=True, bIgnoreGlobalAes:=False)
-        sdgLayerOptions.ShowDialog()
+        sdgLayerOptions.SetupLayer(clsNewGgPlot:=clsRggplotFunction, clsNewGeomFunc:=clsRScatterGeomFunction, clsNewGlobalAesFunc:=clsRaesFunction, clsNewLocalAes:=clsLocalRaesFunction, bFixGeom:=True, ucrNewBaseSelector:=ucrSelectorForScatter, bApplyAesGlobally:=True, bReset:=bResetlayerSubdialog)
         'Coming from the sdgLayerOptions, clsRaesFunction and others has been modified. One then needs to display these modifications on the dlgScatteredPlot.
-
+        sdgLayerOptions.ShowDialog()
+        bResetlayerSubdialog = False
         'The aesthetics parameters on the main dialog are repopulated as required. 
         For Each clsParam In clsRaesFunction.clsParameters
             If clsParam.strArgumentName = "x" Then
@@ -147,7 +208,7 @@ Public Class dlgScatterPlot
                 'Warning: what if someone used the name value for one of it's variables independently from the multiple variables method ? Here if the receiver is actually in single mode, the variable "value" will still be given back, which throws the problem back to the creation of "value" in the multiple receiver case.
             ElseIf clsParam.strArgumentName = "y" AndAlso (clsParam.strArgumentValue <> "value" OrElse ucrVariablesAsFactorForScatter.bSingleVariable) Then
                 'Still might be in the case of bSingleVariable with mapping y="".
-                If clsParam.strArgumentValue <> (Chr(34) & Chr(34)) Then
+                If clsParam.strArgumentValue = (Chr(34) & Chr(34)) Then
                     ucrVariablesAsFactorForScatter.Clear()
                 Else ucrVariablesAsFactorForScatter.Add(clsParam.strArgumentValue)
                 End If
@@ -156,17 +217,31 @@ Public Class dlgScatterPlot
             End If
         Next
     End Sub
-
-    Private Sub ucrSaveScatterPlot_GraphNameChanged() Handles ucrSaveScatterPlot.GraphNameChanged, ucrSaveScatterPlot.SaveGraphCheckedChanged
-        If ucrSaveScatterPlot.bSaveGraph Then
-            ucrBase.clsRsyntax.SetAssignTo(ucrSaveScatterPlot.strGraphName, strTempDataframe:=ucrSelectorForScatter.ucrAvailableDataFrames.cboAvailableDataFrames.Text, strTempGraph:=ucrSaveScatterPlot.strGraphName)
-        Else
-            ucrBase.clsRsyntax.SetAssignTo("last_graph", strTempDataframe:=ucrSelectorForScatter.ucrAvailableDataFrames.cboAvailableDataFrames.Text, strTempGraph:="last_graph")
-        End If
+    Private Sub ucrSaveScatterPlot_ContentsChanged() Handles ucrSaveScatterPlot.ControlContentsChanged, ucrReceiverX.ControlContentsChanged, ucrVariablesAsFactorForScatter.ControlContentsChanged, ucrSaveScatterPlot.ControlContentsChanged
         TestOkEnabled()
     End Sub
 
-    Private Sub ucrSaveScatterPlot_ContentsChanged() Handles ucrSaveScatterPlot.ContentsChanged
-        TestOkEnabled()
+    Private Sub CheckIfNumeric()
+        'strReceiverXVarType = ucrReceiverX.strCurrDataType
+        'strReceiverYSingleVarType = ucrVariablesAsFactorForScatter.ucrSingleVariable.strCurrDataType
+
+        'If (ucrVariablesAsFactorForScatter.ucrMultipleVariables.GetCurrentItemTypes.Count > 0) Then
+        '    strReceiverYMultipleVarType = ucrVariablesAsFactorForScatter.ucrMultipleVariables.GetCurrentItemTypes.Item(0) 'how about the others as this just gets for the first one 
+        'Else
+        '    strReceiverYMultipleVarType = ""
+        'End If
+
+        'If (Not ucrVariablesAsFactorForScatter.IsEmpty() AndAlso Not ucrReceiverX.IsEmpty()) Then
+        '    If ((strReceiverXVarType = "numeric" OrElse strReceiverXVarType = "integer") AndAlso (strReceiverYSingleVarType = "numeric" OrElse strReceiverYSingleVarType = "integer")) OrElse (strReceiverYMultipleVarType = "numeric" OrElse strReceiverYMultipleVarType = "integer") Then
+        '        ucrChkLineofBestFit.Enabled = True
+        '    End If
+        'Else
+        '    ucrChkLineofBestFit.Enabled = False
+        '    clsBaseOperator.RemoveParameterByName("geom_smooth")
+        'End If
+    End Sub
+
+    Private Sub ucrVariablesAsFactorForScatter_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrVariablesAsFactorForScatter.ControlContentsChanged, ucrReceiverX.ControlContentsChanged
+        ' CheckIfNumeric()
     End Sub
 End Class

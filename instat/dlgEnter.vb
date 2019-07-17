@@ -1,5 +1,5 @@
-﻿' Instat-R
-' Copyright (C) 2015
+﻿' R- Instat
+' Copyright (C) 2015-2017
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ' GNU General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License k
+' You should have received a copy of the GNU General Public License 
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Imports instat.Translations
@@ -50,19 +50,25 @@ Public Class dlgEnter
         ucrSaveEnterResultInto.SetDefaultTypeAsColumn()
         ucrSaveEnterResultInto.SetDataFrameSelector(ucrDataFrameEnter)
         ucrSaveEnterResultInto.SetValidationTypeAsRVariable()
+        cmdTry.Enabled = False
     End Sub
     Private Sub SetDefaults()
         chkShowEnterArguments.Checked = False
         ucrDataFrameEnter.Reset()
         chkSaveEnterResultInto.Checked = True
         ucrSaveEnterResultInto.SetPrefix("Enter")
+        ucrReceiverForEnterCalculation.Clear()
     End Sub
     Private Sub ReopenDialog()
         SaveResults()
     End Sub
     Private Sub TestOKEnabled()
         If Not ucrReceiverForEnterCalculation.IsEmpty Then
-            ucrBase.OKEnabled(True)
+            If chkSaveEnterResultInto.Checked AndAlso Not ucrSaveEnterResultInto.IsEmpty Then
+                ucrBase.OKEnabled(True)
+            Else
+                ucrBase.OKEnabled(False)
+            End If
         Else
             ucrBase.OKEnabled(False)
         End If
@@ -70,7 +76,7 @@ Public Class dlgEnter
 
     Private Sub SaveResults()
         If chkSaveEnterResultInto.Checked Then
-            ucrBase.clsRsyntax.SetAssignTo(ucrSaveEnterResultInto.GetText(), strTempColumn:=ucrSaveEnterResultInto.GetText(), strTempDataframe:=ucrDataFrameEnter.cboAvailableDataFrames.Text)
+            ucrBase.clsRsyntax.SetAssignTo(ucrSaveEnterResultInto.GetText(), strTempColumn:=ucrSaveEnterResultInto.GetText(), strTempDataframe:=ucrDataFrameEnter.cboAvailableDataFrames.Text, bRequireCorrectLength:=False)
             ucrBase.clsRsyntax.bExcludeAssignedFunctionOutput = True
             ucrBase.clsRsyntax.iCallType = 0
         Else
@@ -265,6 +271,9 @@ Public Class dlgEnter
 
     Private Sub ucrSaveEnterResultInto_NameChanged() Handles ucrSaveEnterResultInto.NameChanged
         SaveResults()
+    End Sub
+
+    Private Sub ucrSaveEnterResultInto_ContentsChanged() Handles ucrSaveEnterResultInto.ContentsChanged
         TestOKEnabled()
     End Sub
 
@@ -295,8 +304,8 @@ Public Class dlgEnter
         bIsAssigned = ucrBase.clsRsyntax.GetbIsAssigned()
         bToBeAssigned = ucrBase.clsRsyntax.GetbToBeAssigned()
         strAssignTo = ucrBase.clsRsyntax.GetstrAssignTo()
-        strAssignToColumn = ucrBase.clsRsyntax.strAssignToColumn
-        strAssignToDataFrame = ucrBase.clsRsyntax.strAssignToDataframe
+        strAssignToColumn = ucrBase.clsRsyntax.GetstrAssignToColumn()
+        strAssignToDataFrame = ucrBase.clsRsyntax.GetstrAssignToDataFrame()
 
         Try
             If ucrReceiverForEnterCalculation.IsEmpty Then
@@ -330,8 +339,8 @@ Public Class dlgEnter
             ucrBase.clsRsyntax.SetbIsAssigned(bIsAssigned)
             ucrBase.clsRsyntax.SetbToBeAssigned(bToBeAssigned)
             ucrBase.clsRsyntax.SetstrAssignTo(strAssignTo)
-            ucrBase.clsRsyntax.strAssignToColumn = strAssignToColumn
-            ucrBase.clsRsyntax.strAssignToDataframe = strAssignToDataFrame
+            ucrBase.clsRsyntax.SetstrAssignToColumn(strAssignToColumn)
+            ucrBase.clsRsyntax.SetstrAssignToDataFrame(strAssignToDataFrame)
         End Try
     End Sub
 

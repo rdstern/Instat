@@ -1,5 +1,5 @@
-﻿' Instat-R
-' Copyright (C) 2015
+﻿' R- Instat
+' Copyright (C) 2015-2017
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -11,41 +11,77 @@
 ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ' GNU General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License k
+' You should have received a copy of the GNU General Public License 
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Imports instat.Translations
 Public Class dlgFactorDataFrame
     Public bFirstLoad As Boolean = True
+    Private bReset As Boolean = True
+
     Private Sub ucrSelectorFactorDataFrame_Load(sender As Object, e As EventArgs) Handles ucrSelectorFactorDataFrame.Load
         If bFirstLoad Then
             InitialiseDialog()
-            SetDefaults()
             bFirstLoad = False
-        Else
-            ReopenDialog()
         End If
-        TestOKEnabled()
+        If bReset Then
+            SetDefaults()
+        End If
+        SetRCodeforControls(bReset)
+        bReset = False
         autoTranslate(Me)
-
     End Sub
+
     Private Sub InitialiseDialog()
-        ucrBase.clsRsyntax.SetFunction(frmMain.clsRLink.strInstatDataObject & "$create_factor_data_frame")
+        ucrBase.iHelpTopicID = 162
+
+        'ucrselector
+        ucrSelectorFactorDataFrame.SetParameter(New RParameter("data_name", 0))
+        ucrSelectorFactorDataFrame.SetParameterIsString()
+
+        ' ucrreceiver
+        ucrReceiverFactorDataFrame.SetParameter(New RParameter("factor", 1))
+        ucrReceiverFactorDataFrame.strSelectorHeading = "Factors"
+        ucrReceiverFactorDataFrame.SetParameterIsString()
         ucrReceiverFactorDataFrame.Selector = ucrSelectorFactorDataFrame
         ucrReceiverFactorDataFrame.SetMeAsReceiver()
-        ucrReceiverFactorDataFrame.SetIncludedDataTypes({"factor"})
-        SetDefaults()
+        ucrReceiverFactorDataFrame.SetIncludedDataTypes({"factor"}, bStrict:=True)
+
+        'ucrnewname
+        ucrInputFactorNames.SetParameter(New RParameter("factor_data_frame_name", 2))
+        ucrInputFactorNames.SetValidationTypeAsRVariable()
+
+        'chk boxes
+        ucrChkAddCurrentContrasts.SetText("Add Current Contrasts")
+        ucrChkAddCurrentContrasts.SetParameter(New RParameter("include_contrasts", 3))
+        ucrChkAddCurrentContrasts.SetValuesCheckedAndUnchecked("TRUE", "FALSE")
+        ucrChkAddCurrentContrasts.SetRDefault("TRUE")
+
+        ucrChkReplaceIfAlreadyExists.SetText("Replace if Already Exists")
+        ucrChkReplaceIfAlreadyExists.SetParameter(New RParameter("replace", 4))
+        ucrChkReplaceIfAlreadyExists.SetValuesCheckedAndUnchecked("TRUE", "FALSE")
+        ucrChkReplaceIfAlreadyExists.SetRDefault("TRUE")
     End Sub
+
     Private Sub SetDefaults()
-        chkAddCurrentContrast.Checked = True
-        IncludeContrast()
-        chkReplaceFactorSheet.Checked = False
-        Replace()
+        Dim clsDefaultFunction As New RFunction
+
+        ucrInputFactorNames.Reset()
         ucrSelectorFactorDataFrame.Reset()
         ucrInputFactorNames.ResetText()
+
+        clsDefaultFunction.SetRCommand(frmMain.clsRLink.strInstatDataObject & "$create_factor_data_frame")
+
+        ucrBase.clsRsyntax.SetBaseRFunction(clsDefaultFunction.Clone())
+
+        CheckAutoName()
     End Sub
 
     Private Sub ReopenDialog()
+    End Sub
+
+    Private Sub SetRCodeforControls(bReset As Boolean)
+        SetRCode(Me, ucrBase.clsRsyntax.clsBaseFunction, bReset)
     End Sub
 
     Private Sub TestOKEnabled()
@@ -58,62 +94,21 @@ Public Class dlgFactorDataFrame
 
     Private Sub ucrBase_ClickReset(sender As Object, e As EventArgs) Handles ucrBase.ClickReset
         SetDefaults()
+        SetRCodeforControls(True)
         TestOKEnabled()
     End Sub
 
-    Private Sub ucrSelectorFactorDataFrame_DataFrameChanged() Handles ucrSelectorFactorDataFrame.DataFrameChanged
-        ucrBase.clsRsyntax.AddParameter("data_name", Chr(34) & ucrSelectorFactorDataFrame.ucrAvailableDataFrames.cboAvailableDataFrames.SelectedItem & Chr(34))
-    End Sub
-
-    Private Sub chkAddCurrentContrast_CheckedChanged(sender As Object, e As EventArgs) Handles chkAddCurrentContrast.CheckedChanged
-        IncludeContrast()
-    End Sub
-    Private Sub IncludeContrast()
-        If chkAddCurrentContrast.Checked Then
-            ucrBase.clsRsyntax.AddParameter("include_contrasts", "TRUE")
-        Else
-            ucrBase.clsRsyntax.AddParameter("include_contrasts", "FALSE")
-        End If
-    End Sub
-
-    Private Sub chkReplaceFactorSheet_CheckedChanged(sender As Object, e As EventArgs) Handles chkReplaceFactorSheet.CheckedChanged
-        Replace()
-    End Sub
-
-    Private Sub Replace()
-        If chkReplaceFactorSheet.Checked Then
-            ucrBase.clsRsyntax.AddParameter("replace", "FALSE")
-        Else
-            ucrBase.clsRsyntax.AddParameter("replace", "TRUE")
-        End If
-    End Sub
-
-    Private Sub ucrReceiverFactorDataFrame_SelectionChanged(sender As Object, e As EventArgs) Handles ucrReceiverFactorDataFrame.SelectionChanged
-        FactorVariable()
+    Private Sub ucrInputFactorNames_ContentsChanged() Handles ucrInputFactorNames.ControlContentsChanged, ucrReceiverFactorDataFrame.ControlContentsChanged, ucrSelectorFactorDataFrame.ControlContentsChanged
         TestOKEnabled()
     End Sub
 
-    Private Sub FactorVariable()
-        If Not ucrReceiverFactorDataFrame.IsEmpty Then
-            ucrBase.clsRsyntax.AddParameter("factor", ucrReceiverFactorDataFrame.GetVariableNames)
-        Else
-            ucrBase.clsRsyntax.RemoveParameter("factor")
+    Private Sub ucrDataFrameToRename_ControlValueChanged(ucrChangedControl As ucrCore) Handles ucrReceiverFactorDataFrame.ControlValueChanged
+        CheckAutoName()
+    End Sub
+
+    Private Sub CheckAutoName()
+        If Not ucrReceiverFactorDataFrame.IsEmpty AndAlso Not ucrInputFactorNames.bUserTyped Then
+            ucrInputFactorNames.SetName(ucrReceiverFactorDataFrame.GetVariableNames(False))
         End If
-    End Sub
-
-    Private Sub FactorDataFrameName()
-        If Not ucrInputFactorNames.IsEmpty Then
-            ucrBase.clsRsyntax.AddParameter("factor_data_frame_name", Chr(34) & ucrInputFactorNames.GetText & Chr(34))
-        Else
-            ucrBase.clsRsyntax.RemoveParameter("factor_data_frame_name")
-        End If
-    End Sub
-
-    Private Sub ucrInputFactorNames_ContentsChanged() Handles ucrInputFactorNames.ContentsChanged
-        TestOKEnabled()
-    End Sub
-
-    Private Sub ucrInputFactorNames_NameChanged() Handles ucrInputFactorNames.NameChanged
-        FactorDataFrameName()
     End Sub
 End Class

@@ -1,5 +1,5 @@
-﻿' Instat-R
-' Copyright (C) 2015
+﻿' R- Instat
+' Copyright (C) 2015-2017
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -11,62 +11,81 @@
 ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ' GNU General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License k
+' You should have received a copy of the GNU General Public License 
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 Imports instat.Translations
 Public Class dlgCountinFactor
     Private bFirstLoad As Boolean = True
-    Private Sub dlgCountinFactor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private bReset As Boolean = True
+    Private clsDefaultFunction As New RFunction
+
+    Private Sub dlgCountinFactor_Load(sender As Object, e As EventArgs) Handles Me.Load
+        autoTranslate(Me)
         If bFirstLoad Then
             InitialiseDialog()
-            SetDefaults()
             bFirstLoad = False
-        Else
-            ReopenDialog()
         End If
+        If bReset Then
+            SetDefaults()
+        End If
+        SetRCodeForControls(bReset)
+        bReset = False
         TestOkEnabled()
     End Sub
-    Private Sub InitialiseDialog()
-        ucrCountReceiver.Selector = ucrCountSelector
-        ucrCountReceiver.SetIncludedDataTypes({"factor"})
-        ucrCountReceiver.SetMeAsReceiver()
-        ucrBase.iHelpTopicID = 457
-        ucrInputCountColumnName.SetItemsTypeAsColumns()
-        ucrInputCountColumnName.SetDefaultTypeAsColumn()
-        ucrInputCountColumnName.SetDataFrameSelector(ucrCountSelector.ucrAvailableDataFrames)
-        ucrInputCountColumnName.SetValidationTypeAsRVariable()
-        ucrBase.clsRsyntax.SetFunction("fac.nested")
-    End Sub
-    Private Sub SetDefaults()
-        ucrCountSelector.Reset()
-        ucrInputCountColumnName.Reset()
-        ucrInputCountColumnName.SetPrefix("Count")
-        TestOkEnabled()
-    End Sub
-    Private Sub ReopenDialog()
 
+    Private Sub InitialiseDialog()
+        ucrBase.iHelpTopicID = 457
+
+        'ucrReceiver
+        ucrCountReceiver.SetParameter(New RParameter("nesting.fac", 0))
+        ucrCountReceiver.SetParameterIsRFunction()
+        ucrCountReceiver.Selector = ucrCountSelector
+        ucrCountReceiver.SetIncludedDataTypes({"factor"}, bStrict:=True)
+        ucrCountReceiver.strSelectorHeading = "Factors"
+        ucrCountReceiver.SetMeAsReceiver()
+        ucrCountReceiver.bUseFilteredData = False
+
+        ' ucrNewColName
+        ucrNewColName.SetIsTextBox()
+        ucrNewColName.SetPrefix("Count")
+        ucrNewColName.SetSaveTypeAsColumn()
+        ucrNewColName.SetDataFrameSelector(ucrCountSelector.ucrAvailableDataFrames)
+        ucrNewColName.SetLabelText("New Column Name:")
     End Sub
+
+    Private Sub SetDefaults()
+        clsDefaultFunction = New RFunction
+
+        ucrCountSelector.Reset()
+        ucrNewColName.Reset()
+
+        clsDefaultFunction.SetPackageName("dae")
+        clsDefaultFunction.SetRCommand("fac.nested")
+        clsDefaultFunction.SetAssignTo(strTemp:=ucrNewColName.GetText(), strTempDataframe:=ucrCountSelector.ucrAvailableDataFrames.cboAvailableDataFrames.Text, strTempColumn:=ucrNewColName.GetText())
+
+        ucrBase.clsRsyntax.SetBaseRFunction(clsDefaultFunction)
+    End Sub
+
+    Private Sub SetRCodeForControls(bReset As Boolean)
+        SetRCode(Me, ucrBase.clsRsyntax.clsBaseFunction, bReset)
+    End Sub
+
     Private Sub TestOkEnabled()
-        If Not ucrCountReceiver.IsEmpty AndAlso Not ucrInputCountColumnName.IsEmpty Then
+        If Not ucrCountReceiver.IsEmpty AndAlso ucrNewColName.IsComplete Then
             ucrBase.OKEnabled(True)
         Else
             ucrBase.OKEnabled(False)
         End If
     End Sub
+
     Private Sub ucrBase_ClickReset(sender As Object, e As EventArgs) Handles ucrBase.ClickReset
         SetDefaults()
-    End Sub
-
-    Private Sub ucrInputColumnName_NameChanged() Handles ucrInputCountColumnName.NameChanged
-        ucrBase.clsRsyntax.SetAssignTo(strAssignToName:=ucrInputCountColumnName.GetText, strTempDataframe:=ucrCountSelector.ucrAvailableDataFrames.cboAvailableDataFrames.Text, strTempColumn:=ucrInputCountColumnName.GetText, bAssignToIsPrefix:=True)
+        SetRCodeForControls(True)
         TestOkEnabled()
     End Sub
-    Private Sub ucrCountReceiver_SelectionChanged(sender As Object, e As EventArgs) Handles ucrCountReceiver.SelectionChanged
-        If Not ucrCountReceiver.IsEmpty Then
-            ucrBase.clsRsyntax.AddParameter("nesting.fac", clsRFunctionParameter:=ucrCountReceiver.GetVariables)
-        Else
-            ucrBase.clsRsyntax.RemoveParameter("nesting.fac")
-        End If
+
+    Private Sub ucrCountReceiver_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrCountReceiver.ControlContentsChanged, ucrNewColName.ControlContentsChanged
         TestOkEnabled()
     End Sub
 End Class

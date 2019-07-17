@@ -1,5 +1,5 @@
-﻿' Instat-R
-' Copyright (C) 2015
+﻿' R- Instat
+' Copyright (C) 2015-2017
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -11,8 +11,9 @@
 ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ' GNU General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License k
+' You should have received a copy of the GNU General Public License 
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 Imports System.ComponentModel
 
 Public Class ucrInputTextBox
@@ -37,15 +38,18 @@ Public Class ucrInputTextBox
         Dim strCurrent As String
 
         strCurrent = txtInput.Text
-        If bSuggestEditOnLeave Then
+        If bAutoChangeOnLeave Then
             If Not IsValid(strCurrent) Then
                 'TODO This message should contain the same message from ValidateText()
-                Select Case MsgBox(Chr(34) & strCurrent & Chr(34) & " is an invalid name." & vbNewLine & "Would you like it to be automatically corrected?", vbYesNo, "Invalid Name")
-                    Case MsgBoxResult.Yes
-                        SetName(frmMain.clsRLink.MakeValidText(strCurrent))
-                    Case Else
-                        e.Cancel = True
-                End Select
+                'Temp disabled so that change is done automatically
+                'TODO Think about more subtle ways to do this without being annoying to the user
+                'Select Case MsgBox(Chr(34) & strCurrent & Chr(34) & " is an invalid name." & Environment.NewLine & "Would you like it to be automatically corrected?", vbYesNo, "Invalid Name")
+                '    Case MsgBoxResult.Yes
+                '        SetName(frmMain.clsRLink.MakeValidText(strCurrent))
+                '    Case Else
+                '        e.Cancel = True
+                'End Select
+                SetName(frmMain.clsRLink.MakeValidText(strCurrent))
             End If
         Else
             e.Cancel = Not ValidateText(strCurrent)
@@ -55,6 +59,10 @@ Public Class ucrInputTextBox
 
     Public Overrides Function GetText() As String
         Return txtInput.Text
+    End Function
+
+    Public Overrides Function GetValue() As Object
+        Return GetText()
     End Function
 
     Public Overrides Function IsEmpty() As Boolean
@@ -67,6 +75,25 @@ Public Class ucrInputTextBox
 
     Private Sub txtInput_TextChanged(sender As Object, e As EventArgs) Handles txtInput.TextChanged
         OnContentsChanged()
+    End Sub
+
+    Public Property IsMultiline As Boolean
+        Get
+            Return txtInput.Multiline
+        End Get
+        Set(bMultiline As Boolean)
+            txtInput.Multiline = bMultiline
+        End Set
+    End Property
+
+    Private Sub mnuRightClickCopy_Click(sender As Object, e As EventArgs) Handles mnuRightClickCopy.Click
+        txtInput.Copy()
+    End Sub
+
+    Private Sub ucrInputTextBox_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If bFirstLoad Then
+            bFirstLoad = False
+        End If
     End Sub
 
     Public Overrides Property IsReadOnly As Boolean

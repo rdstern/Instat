@@ -1,9 +1,25 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿' R- Instat
+' Copyright (C) 2015-2017
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License 
+' along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class sdgANOVAOptions
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,16 +36,10 @@ Partial Class sdgANOVAOptions
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(sdgANOVAOptions))
-        Me.tbcOptions = New System.Windows.Forms.TabControl()
-        Me.tbpDisplay = New System.Windows.Forms.TabPage()
-        Me.chkContrasts = New System.Windows.Forms.CheckBox()
-        Me.chkStandardErrors = New System.Windows.Forms.CheckBox()
-        Me.chkMeansAndCounts = New System.Windows.Forms.CheckBox()
-        Me.chkEstimateValues = New System.Windows.Forms.CheckBox()
-        Me.chkANOVATable = New System.Windows.Forms.CheckBox()
+        Me.ucrBaseSdg = New instat.ucrButtonsSubdialogue()
         Me.tbpGraphics = New System.Windows.Forms.TabPage()
         Me.grpMeans = New System.Windows.Forms.GroupBox()
         Me.nudConfidenceLevel = New System.Windows.Forms.NumericUpDown()
@@ -38,69 +48,25 @@ Partial Class sdgANOVAOptions
         Me.chkMeans = New System.Windows.Forms.CheckBox()
         Me.grpResiduals = New System.Windows.Forms.GroupBox()
         Me.chkResiduals = New System.Windows.Forms.CheckBox()
-        Me.ucrBaseSdg = New instat.ucrButtonsSubdialogue()
-        Me.tbcOptions.SuspendLayout()
-        Me.tbpDisplay.SuspendLayout()
+        Me.tbcOptions = New System.Windows.Forms.TabControl()
+        Me.tbpDisplay = New System.Windows.Forms.TabPage()
+        Me.chkContrasts = New System.Windows.Forms.CheckBox()
+        Me.chkStandardErrors = New System.Windows.Forms.CheckBox()
+        Me.chkMeansAndCounts = New System.Windows.Forms.CheckBox()
+        Me.chkEstimateValues = New System.Windows.Forms.CheckBox()
+        Me.chkANOVATable = New System.Windows.Forms.CheckBox()
         Me.tbpGraphics.SuspendLayout()
         Me.grpMeans.SuspendLayout()
         CType(Me.nudConfidenceLevel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpResiduals.SuspendLayout()
+        Me.tbcOptions.SuspendLayout()
+        Me.tbpDisplay.SuspendLayout()
         Me.SuspendLayout()
         '
-        'tbcOptions
+        'ucrBaseSdg
         '
-        Me.tbcOptions.Controls.Add(Me.tbpDisplay)
-        Me.tbcOptions.Controls.Add(Me.tbpGraphics)
-        resources.ApplyResources(Me.tbcOptions, "tbcOptions")
-        Me.tbcOptions.Name = "tbcOptions"
-        Me.tbcOptions.SelectedIndex = 0
-        '
-        'tbpDisplay
-        '
-        Me.tbpDisplay.Controls.Add(Me.chkContrasts)
-        Me.tbpDisplay.Controls.Add(Me.chkStandardErrors)
-        Me.tbpDisplay.Controls.Add(Me.chkMeansAndCounts)
-        Me.tbpDisplay.Controls.Add(Me.chkEstimateValues)
-        Me.tbpDisplay.Controls.Add(Me.chkANOVATable)
-        resources.ApplyResources(Me.tbpDisplay, "tbpDisplay")
-        Me.tbpDisplay.Name = "tbpDisplay"
-        Me.tbpDisplay.Tag = "Display"
-        Me.tbpDisplay.UseVisualStyleBackColor = True
-        '
-        'chkContrasts
-        '
-        resources.ApplyResources(Me.chkContrasts, "chkContrasts")
-        Me.chkContrasts.Name = "chkContrasts"
-        Me.chkContrasts.Tag = "Contrasts"
-        Me.chkContrasts.UseVisualStyleBackColor = True
-        '
-        'chkStandardErrors
-        '
-        resources.ApplyResources(Me.chkStandardErrors, "chkStandardErrors")
-        Me.chkStandardErrors.Name = "chkStandardErrors"
-        Me.chkStandardErrors.Tag = "Standard_errors"
-        Me.chkStandardErrors.UseVisualStyleBackColor = True
-        '
-        'chkMeansAndCounts
-        '
-        resources.ApplyResources(Me.chkMeansAndCounts, "chkMeansAndCounts")
-        Me.chkMeansAndCounts.Name = "chkMeansAndCounts"
-        Me.chkMeansAndCounts.Tag = "Means_and_counts"
-        Me.chkMeansAndCounts.UseVisualStyleBackColor = True
-        '
-        'chkEstimateValues
-        '
-        resources.ApplyResources(Me.chkEstimateValues, "chkEstimateValues")
-        Me.chkEstimateValues.Name = "chkEstimateValues"
-        Me.chkEstimateValues.Tag = "P_values"
-        Me.chkEstimateValues.UseVisualStyleBackColor = True
-        '
-        'chkANOVATable
-        '
-        resources.ApplyResources(Me.chkANOVATable, "chkANOVATable")
-        Me.chkANOVATable.Name = "chkANOVATable"
-        Me.chkANOVATable.Tag = "ANOVA Table"
-        Me.chkANOVATable.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.ucrBaseSdg, "ucrBaseSdg")
+        Me.ucrBaseSdg.Name = "ucrBaseSdg"
         '
         'tbpGraphics
         '
@@ -163,10 +129,60 @@ Partial Class sdgANOVAOptions
         Me.chkResiduals.Tag = "Four_in_one"
         Me.chkResiduals.UseVisualStyleBackColor = True
         '
-        'ucrBaseSdg
+        'tbcOptions
         '
-        resources.ApplyResources(Me.ucrBaseSdg, "ucrBaseSdg")
-        Me.ucrBaseSdg.Name = "ucrBaseSdg"
+        Me.tbcOptions.Controls.Add(Me.tbpDisplay)
+        Me.tbcOptions.Controls.Add(Me.tbpGraphics)
+        resources.ApplyResources(Me.tbcOptions, "tbcOptions")
+        Me.tbcOptions.Name = "tbcOptions"
+        Me.tbcOptions.SelectedIndex = 0
+        '
+        'tbpDisplay
+        '
+        Me.tbpDisplay.Controls.Add(Me.chkContrasts)
+        Me.tbpDisplay.Controls.Add(Me.chkStandardErrors)
+        Me.tbpDisplay.Controls.Add(Me.chkMeansAndCounts)
+        Me.tbpDisplay.Controls.Add(Me.chkEstimateValues)
+        Me.tbpDisplay.Controls.Add(Me.chkANOVATable)
+        resources.ApplyResources(Me.tbpDisplay, "tbpDisplay")
+        Me.tbpDisplay.Name = "tbpDisplay"
+        Me.tbpDisplay.Tag = "Display"
+        Me.tbpDisplay.UseVisualStyleBackColor = True
+        '
+        'chkContrasts
+        '
+        resources.ApplyResources(Me.chkContrasts, "chkContrasts")
+        Me.chkContrasts.Name = "chkContrasts"
+        Me.chkContrasts.Tag = "Contrasts"
+        Me.chkContrasts.UseVisualStyleBackColor = True
+        '
+        'chkStandardErrors
+        '
+        resources.ApplyResources(Me.chkStandardErrors, "chkStandardErrors")
+        Me.chkStandardErrors.Name = "chkStandardErrors"
+        Me.chkStandardErrors.Tag = "Standard_errors"
+        Me.chkStandardErrors.UseVisualStyleBackColor = True
+        '
+        'chkMeansAndCounts
+        '
+        resources.ApplyResources(Me.chkMeansAndCounts, "chkMeansAndCounts")
+        Me.chkMeansAndCounts.Name = "chkMeansAndCounts"
+        Me.chkMeansAndCounts.Tag = "Means_and_counts"
+        Me.chkMeansAndCounts.UseVisualStyleBackColor = True
+        '
+        'chkEstimateValues
+        '
+        resources.ApplyResources(Me.chkEstimateValues, "chkEstimateValues")
+        Me.chkEstimateValues.Name = "chkEstimateValues"
+        Me.chkEstimateValues.Tag = "P_values"
+        Me.chkEstimateValues.UseVisualStyleBackColor = True
+        '
+        'chkANOVATable
+        '
+        resources.ApplyResources(Me.chkANOVATable, "chkANOVATable")
+        Me.chkANOVATable.Name = "chkANOVATable"
+        Me.chkANOVATable.Tag = "ANOVA Table"
+        Me.chkANOVATable.UseVisualStyleBackColor = True
         '
         'sdgANOVAOptions
         '
@@ -179,34 +195,31 @@ Partial Class sdgANOVAOptions
         Me.MinimizeBox = False
         Me.Name = "sdgANOVAOptions"
         Me.Tag = "ANOVA_options"
-        Me.tbcOptions.ResumeLayout(False)
-        Me.tbpDisplay.ResumeLayout(False)
-        Me.tbpDisplay.PerformLayout()
         Me.tbpGraphics.ResumeLayout(False)
         Me.grpMeans.ResumeLayout(False)
-        Me.grpMeans.PerformLayout()
         CType(Me.nudConfidenceLevel, System.ComponentModel.ISupportInitialize).EndInit()
         Me.grpResiduals.ResumeLayout(False)
-        Me.grpResiduals.PerformLayout()
+        Me.tbcOptions.ResumeLayout(False)
+        Me.tbpDisplay.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents ucrBaseSubdialog As ucrButtonsSubdialogue
-    Friend WithEvents tbcOptions As TabControl
-    Friend WithEvents tbpDisplay As TabPage
-    Friend WithEvents chkMeansAndCounts As CheckBox
-    Friend WithEvents chkEstimateValues As CheckBox
-    Friend WithEvents chkANOVATable As CheckBox
-    Friend WithEvents tbpGraphics As TabPage
-    Friend WithEvents chkMeans As CheckBox
-    Friend WithEvents chkResiduals As CheckBox
     Friend WithEvents ucrBaseSdg As ucrButtonsSubdialogue
-    Friend WithEvents chkContrasts As CheckBox
-    Friend WithEvents chkStandardErrors As CheckBox
+    Friend WithEvents tbpGraphics As TabPage
     Friend WithEvents grpMeans As GroupBox
-    Friend WithEvents grpResiduals As GroupBox
     Friend WithEvents nudConfidenceLevel As NumericUpDown
     Friend WithEvents lblConfidenceLevel As Label
     Friend WithEvents chkConfidenceLimits As CheckBox
+    Friend WithEvents chkMeans As CheckBox
+    Friend WithEvents grpResiduals As GroupBox
+    Friend WithEvents chkResiduals As CheckBox
+    Friend WithEvents tbcOptions As TabControl
+    Friend WithEvents tbpDisplay As TabPage
+    Friend WithEvents chkContrasts As CheckBox
+    Friend WithEvents chkStandardErrors As CheckBox
+    Friend WithEvents chkMeansAndCounts As CheckBox
+    Friend WithEvents chkEstimateValues As CheckBox
+    Friend WithEvents chkANOVATable As CheckBox
 End Class

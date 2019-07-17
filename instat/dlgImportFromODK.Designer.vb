@@ -1,4 +1,20 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿' R- Instat
+' Copyright (C) 2015-2017
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License 
+' along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class dlgImportFromODK
     Inherits System.Windows.Forms.Form
 
@@ -22,168 +38,106 @@ Partial Class dlgImportFromODK
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.lblChoosePlatform = New System.Windows.Forms.Label()
-        Me.rdoKobo = New System.Windows.Forms.RadioButton()
-        Me.rdoOna = New System.Windows.Forms.RadioButton()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(dlgImportFromODK))
         Me.lblUsername = New System.Windows.Forms.Label()
-        Me.lblPassword = New System.Windows.Forms.Label()
         Me.lblChooseForm = New System.Windows.Forms.Label()
         Me.cmdFindForms = New System.Windows.Forms.Button()
         Me.ucrInputChooseForm = New instat.ucrInputComboBox()
-        Me.ucrInputPassword = New instat.ucrInputTextBox()
         Me.ucrInputUsername = New instat.ucrInputTextBox()
         Me.ucrBase = New instat.ucrButtons()
-        Me.chkViewPassword = New System.Windows.Forms.CheckBox()
+        Me.ucrPnlPlatform = New instat.UcrPanel()
+        Me.rdoKobo = New System.Windows.Forms.RadioButton()
+        Me.rdoOna = New System.Windows.Forms.RadioButton()
         Me.SuspendLayout()
-        '
-        'lblChoosePlatform
-        '
-        Me.lblChoosePlatform.AutoSize = True
-        Me.lblChoosePlatform.Location = New System.Drawing.Point(10, 10)
-        Me.lblChoosePlatform.Name = "lblChoosePlatform"
-        Me.lblChoosePlatform.Size = New System.Drawing.Size(87, 13)
-        Me.lblChoosePlatform.TabIndex = 0
-        Me.lblChoosePlatform.Text = "Choose Platform:"
-        '
-        'rdoKobo
-        '
-        Me.rdoKobo.AutoSize = True
-        Me.rdoKobo.Location = New System.Drawing.Point(105, 8)
-        Me.rdoKobo.Name = "rdoKobo"
-        Me.rdoKobo.Size = New System.Drawing.Size(50, 17)
-        Me.rdoKobo.TabIndex = 1
-        Me.rdoKobo.TabStop = True
-        Me.rdoKobo.Text = "Kobo"
-        Me.rdoKobo.UseVisualStyleBackColor = True
-        '
-        'rdoOna
-        '
-        Me.rdoOna.AutoSize = True
-        Me.rdoOna.Location = New System.Drawing.Point(161, 8)
-        Me.rdoOna.Name = "rdoOna"
-        Me.rdoOna.Size = New System.Drawing.Size(45, 17)
-        Me.rdoOna.TabIndex = 2
-        Me.rdoOna.TabStop = True
-        Me.rdoOna.Text = "Ona"
-        Me.rdoOna.UseVisualStyleBackColor = True
         '
         'lblUsername
         '
-        Me.lblUsername.AutoSize = True
-        Me.lblUsername.Location = New System.Drawing.Point(9, 37)
+        resources.ApplyResources(Me.lblUsername, "lblUsername")
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(58, 13)
-        Me.lblUsername.TabIndex = 3
-        Me.lblUsername.Text = "Username:"
-        '
-        'lblPassword
-        '
-        Me.lblPassword.AutoSize = True
-        Me.lblPassword.Location = New System.Drawing.Point(9, 68)
-        Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(56, 13)
-        Me.lblPassword.TabIndex = 4
-        Me.lblPassword.Text = "Password:"
         '
         'lblChooseForm
         '
-        Me.lblChooseForm.AutoSize = True
-        Me.lblChooseForm.Location = New System.Drawing.Point(9, 120)
+        resources.ApplyResources(Me.lblChooseForm, "lblChooseForm")
         Me.lblChooseForm.Name = "lblChooseForm"
-        Me.lblChooseForm.Size = New System.Drawing.Size(72, 13)
-        Me.lblChooseForm.TabIndex = 6
-        Me.lblChooseForm.Text = "Choose Form:"
         '
         'cmdFindForms
         '
-        Me.cmdFindForms.Location = New System.Drawing.Point(10, 88)
+        resources.ApplyResources(Me.cmdFindForms, "cmdFindForms")
         Me.cmdFindForms.Name = "cmdFindForms"
-        Me.cmdFindForms.Size = New System.Drawing.Size(102, 23)
-        Me.cmdFindForms.TabIndex = 14
-        Me.cmdFindForms.Text = "Find Forms"
         Me.cmdFindForms.UseVisualStyleBackColor = True
         '
         'ucrInputChooseForm
         '
+        Me.ucrInputChooseForm.AddQuotesIfUnrecognised = True
         Me.ucrInputChooseForm.IsReadOnly = False
-        Me.ucrInputChooseForm.Location = New System.Drawing.Point(92, 117)
+        resources.ApplyResources(Me.ucrInputChooseForm, "ucrInputChooseForm")
         Me.ucrInputChooseForm.Name = "ucrInputChooseForm"
-        Me.ucrInputChooseForm.Size = New System.Drawing.Size(137, 21)
-        Me.ucrInputChooseForm.TabIndex = 13
-        '
-        'ucrInputPassword
-        '
-        Me.ucrInputPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ucrInputPassword.IsReadOnly = False
-        Me.ucrInputPassword.Location = New System.Drawing.Point(92, 60)
-        Me.ucrInputPassword.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
-        Me.ucrInputPassword.Name = "ucrInputPassword"
-        Me.ucrInputPassword.Size = New System.Drawing.Size(137, 20)
-        Me.ucrInputPassword.TabIndex = 12
         '
         'ucrInputUsername
         '
+        Me.ucrInputUsername.AddQuotesIfUnrecognised = True
+        Me.ucrInputUsername.IsMultiline = False
         Me.ucrInputUsername.IsReadOnly = False
-        Me.ucrInputUsername.Location = New System.Drawing.Point(92, 31)
+        resources.ApplyResources(Me.ucrInputUsername, "ucrInputUsername")
         Me.ucrInputUsername.Name = "ucrInputUsername"
-        Me.ucrInputUsername.Size = New System.Drawing.Size(137, 21)
-        Me.ucrInputUsername.TabIndex = 11
         '
         'ucrBase
         '
-        Me.ucrBase.Location = New System.Drawing.Point(10, 144)
+        resources.ApplyResources(Me.ucrBase, "ucrBase")
         Me.ucrBase.Name = "ucrBase"
-        Me.ucrBase.Size = New System.Drawing.Size(420, 52)
-        Me.ucrBase.TabIndex = 10
         '
-        'chkViewPassword
+        'ucrPnlPlatform
         '
-        Me.chkViewPassword.AutoSize = True
-        Me.chkViewPassword.Location = New System.Drawing.Point(250, 63)
-        Me.chkViewPassword.Name = "chkViewPassword"
-        Me.chkViewPassword.Size = New System.Drawing.Size(98, 17)
-        Me.chkViewPassword.TabIndex = 15
-        Me.chkViewPassword.Text = "View Password"
-        Me.chkViewPassword.UseVisualStyleBackColor = True
+        resources.ApplyResources(Me.ucrPnlPlatform, "ucrPnlPlatform")
+        Me.ucrPnlPlatform.Name = "ucrPnlPlatform"
+        '
+        'rdoKobo
+        '
+        resources.ApplyResources(Me.rdoKobo, "rdoKobo")
+        Me.rdoKobo.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption
+        Me.rdoKobo.FlatAppearance.BorderSize = 2
+        Me.rdoKobo.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.rdoKobo.Name = "rdoKobo"
+        Me.rdoKobo.TabStop = True
+        Me.rdoKobo.UseVisualStyleBackColor = True
+        '
+        'rdoOna
+        '
+        resources.ApplyResources(Me.rdoOna, "rdoOna")
+        Me.rdoOna.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaption
+        Me.rdoOna.FlatAppearance.BorderSize = 2
+        Me.rdoOna.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.rdoOna.Name = "rdoOna"
+        Me.rdoOna.TabStop = True
+        Me.rdoOna.UseVisualStyleBackColor = True
         '
         'dlgImportFromODK
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(424, 201)
-        Me.Controls.Add(Me.chkViewPassword)
+        Me.Controls.Add(Me.rdoOna)
+        Me.Controls.Add(Me.rdoKobo)
+        Me.Controls.Add(Me.ucrPnlPlatform)
         Me.Controls.Add(Me.cmdFindForms)
         Me.Controls.Add(Me.ucrInputChooseForm)
-        Me.Controls.Add(Me.ucrInputPassword)
         Me.Controls.Add(Me.ucrInputUsername)
         Me.Controls.Add(Me.ucrBase)
         Me.Controls.Add(Me.lblChooseForm)
-        Me.Controls.Add(Me.lblPassword)
         Me.Controls.Add(Me.lblUsername)
-        Me.Controls.Add(Me.rdoOna)
-        Me.Controls.Add(Me.rdoKobo)
-        Me.Controls.Add(Me.lblChoosePlatform)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "dlgImportFromODK"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Import from ODK"
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents lblChoosePlatform As Label
-    Friend WithEvents rdoKobo As RadioButton
-    Friend WithEvents rdoOna As RadioButton
     Friend WithEvents lblUsername As Label
-    Friend WithEvents lblPassword As Label
     Friend WithEvents lblChooseForm As Label
     Friend WithEvents ucrBase As ucrButtons
     Friend WithEvents ucrInputUsername As ucrInputTextBox
-    Friend WithEvents ucrInputPassword As ucrInputTextBox
     Friend WithEvents ucrInputChooseForm As ucrInputComboBox
     Friend WithEvents cmdFindForms As Button
-    Friend WithEvents chkViewPassword As CheckBox
+    Friend WithEvents ucrPnlPlatform As UcrPanel
+    Friend WithEvents rdoKobo As RadioButton
+    Friend WithEvents rdoOna As RadioButton
 End Class
